@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace MathCalc.ApiCalc
 {
@@ -91,7 +92,29 @@ namespace MathCalc.ApiCalc
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title="Api-Calc-Math", Description = "API-CALC", Version = "1.0"});
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Daniel Ralfes - Api de Cálculo V1",
+                    Description = "Api de Cálculo Divisores/Números Primos",
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Daniel Ralfes",
+                        Email = "danielralfes@gmail.com"
+                    }
+                });
+
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title       = "Daniel Ralfes - Api de Cálculo V2",
+                    Description = "Api de Cálculo Divisores/Números Primos",
+                    Version     = "v2",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Daniel Ralfes",
+                        Email = "danielralfes@gmail.com"
+                    }
+                });
             });
         }
 
@@ -103,13 +126,17 @@ namespace MathCalc.ApiCalc
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CF-API V1");
-                });
             }
+
+            //Caso não é para expor fora de testes
+            //deixar dentro do if (env.IsDevelopment())
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "[Ralfes v1] Api de Cálculo Divisores/Números Primos");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "[Ralfes v2] Api de Cálculo Divisores/Números Primos");
+            });
 
             // global cors policy
             app.UseCors(x => x

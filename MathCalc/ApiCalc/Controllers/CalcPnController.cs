@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 using MathCalc.Calc;
 using MathCalc.Calc.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +14,7 @@ namespace MathCalc.ApiCalc.Controllers
     public class CalcPNController : ControllerBase
     {
         private readonly ILogger<CalcPNController> log;
-        private ICalcPrimeNumber calcNumberPrime;
+        private readonly ICalcPrimeNumber calcNumberPrime;
 
         public CalcPNController(ILogger<CalcPNController> logger, ICalcPrimeNumber calcNumber)
         {
@@ -25,17 +23,23 @@ namespace MathCalc.ApiCalc.Controllers
 
         }
 
+
         /// <summary>
         /// Metódo responsável por calcular todos os divisores que compõem o número e calcular todos os divisores primos que compõem o número.
         /// </summary>
+        /// <remarks>
+        /// Enviar número inteiro
+        /// </remarks>
         /// <param name="number">Número inteiro</param>
-        /// <returns>Retorna lista de divores e divisores primos</returns>
+        /// <returns>Retorna lista de divisores e divisores primos</returns>
+        /// <response code="200">Retorna lista de divisores e divisores primos</response>
+        /// <response code="400">Erro ao realizar chamada</response>   
         [HttpGet]
-        [Route("CalculateDividersAndPrimeDividers")]
-        [ResponseType(typeof(CalcPrimeNumberModel))]
-        [ProducesResponseType(201)]
+        [Route("listardivisoes/{number}")]
+        [ProducesResponseType(typeof(CalcPrimeNumberModel), 200)]
         [ProducesResponseType(400)]
-        [Produces("application/json")]
+        [ProducesResponseType(500)]
+        [Produces("text/json")]
         [AllowAnonymous] //Apenas para testar no PostMan, retirar para ambiente de produção/testes
         public async Task<IActionResult> Get(long number)
         {
