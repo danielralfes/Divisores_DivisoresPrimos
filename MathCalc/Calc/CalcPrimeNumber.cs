@@ -1,4 +1,5 @@
 ﻿using MathCalc.Calc.Model;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,8 +8,17 @@ namespace MathCalc.Calc
 {
     public class CalcPrimeNumber : ICalcPrimeNumber
     {
+        private readonly ILogger log;
+
+        public CalcPrimeNumber(ILogger<CalcPrimeNumber> loggerFactory)
+        {
+            log = loggerFactory;
+        }
+
         public async Task<CalcPrimeNumberModel> CalculateDividersAndPrimeDividersAsync(long number)
         {
+            log.LogInformation("Iniciando execução do método: CalculateDividersAndPrimeDividersAsync");
+
             var calcPrime = new CalcPrimeNumberModel
             {
                 Dividers = await CalculateDividersAsync(number)
@@ -21,6 +31,8 @@ namespace MathCalc.Calc
                     calcPrime.DividersPrime.Add(numberDivisor);
                 }
             }
+
+            log.LogInformation("Finalizando execução do método: CalculateDividersAndPrimeDividersAsync");
 
             return calcPrime;
         }

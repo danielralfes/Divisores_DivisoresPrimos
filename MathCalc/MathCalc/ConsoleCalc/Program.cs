@@ -1,5 +1,6 @@
 ﻿using MathCalc.Calc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -10,20 +11,22 @@ namespace MathCalc.ConsoleCalc
     {
         static async Task Main(string[] args)
         {
+            var services        = new ServiceCollection();
+            ConfigureServices(services);
+            var serviceProvider = services.BuildServiceProvider();
+
+            var logger = serviceProvider.GetService<ILoggerFactory>();
+            var log    = logger.CreateLogger<Program>();
+
             try
             {
-                //"Running..."
-
-                var services = new ServiceCollection()
-                                   .AddSingleton<ICalcPrimeNumber>(new CalcPrimeNumber());
-
-                var serviceProvider = services.BuildServiceProvider();
+                log.LogInformation("Running...");
 
                 Console.WriteLine("Calcula todos os divisores que compõem o número e todos os divisores primos");
                 Console.WriteLine("------------------------------------------------------");
                 Console.Write("Informe o número: ");
                 var number = Convert.ToInt64(Console.ReadLine());
-                
+
                 var resultValues = await serviceProvider.GetService<ICalcPrimeNumber>().CalculateDividersAndPrimeDividersAsync(number);
 
                 Console.WriteLine($"Divisores do Número: {number}");
@@ -50,7 +53,7 @@ namespace MathCalc.ConsoleCalc
             }
             catch (Exception ex)
             {
-                //"Unhandled Exception"
+                log.LogError(ex, "Unhandled Exception");
 
                 if (Debugger.IsAttached)
                     Debugger.Break();
@@ -61,6 +64,13 @@ namespace MathCalc.ConsoleCalc
                 Console.ReadLine();
             }
         }
+
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLogging(/*configure => configure.AddConsole()*/) //Para exibir no console descomentar parte comentada
+                    .AddSingleton<ICalcPrimeNumber, CalcPrimeNumber>()
+                    .Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
+        }
     }
 }
-//TODO:Implementar log
