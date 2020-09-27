@@ -5,8 +5,8 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4CCC00BC-CF8B-4BB2-ADE4-AAF9F847CB23}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.gitignore = ..\..\.gitignore
-		..\..\README.md = ..\..\README.md
+		..\.gitignore = ..\.gitignore
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCalc.ConsoleCalc", "ConsoleCalc\MathCalc.ConsoleCalc.csproj", "{D170B377-F1B4-4514-8108-777918512B39}"
