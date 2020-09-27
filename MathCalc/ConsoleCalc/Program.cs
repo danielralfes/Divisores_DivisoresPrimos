@@ -60,7 +60,7 @@ namespace MathCalc.ConsoleCalc
             }
             finally
             {
-                //"Press ENTER to exit..."
+                log.LogInformation("Press ENTER to exit...");
                 Console.ReadLine();
             }
         }

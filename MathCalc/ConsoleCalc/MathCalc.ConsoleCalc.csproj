@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Calc\MathCalc.Calc.csproj" />
+    <ProjectReference Include="..\Calc\MathCalc.Calc.csproj" />
   </ItemGroup>
 
 </Project>
