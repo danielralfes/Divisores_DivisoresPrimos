@@ -10,7 +10,6 @@ namespace MathCalc.Test
     [TestClass]
     public class CalcPrimeTest
     {
-        private readonly ICalcPrimeNumber calcNumberPrime;
         private readonly ServiceProvider serviceProvider;
 
         public CalcPrimeTest()
