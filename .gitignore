@@ -131,11 +131,6 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
-/MathCalc/MathCalc/MathCalc.sln
-/MathCalc/MathCalc/Calc/MathCalc.Calc.csproj
-/MathCalc/MathCalc/Calc/CalcPrimeNumber.cs
-/MathCalc/MathCalc/Calc
-/MathCalc/MathCalc
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite
 /.vs
