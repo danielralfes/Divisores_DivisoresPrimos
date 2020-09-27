@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MathCalc.Calc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MathCalc.ApiCalc
 {
@@ -29,14 +32,17 @@ namespace MathCalc.ApiCalc
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                options.AddDefaultPolicy(builder => builder
+                    .SetIsOriginAllowed(_ => true)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
 
             services.AddControllers();
+
+            services.AddScoped<ICalcPrimeNumber, CalcPrimeNumber>();
+
             services
                 .AddMvc(options =>
                 {
@@ -53,17 +59,66 @@ namespace MathCalc.ApiCalc
                     options.JsonSerializerOptions.IgnoreNullValues = true;
                 })
                 ;
+
+            services.AddMemoryCache();
+
+
+            services.AddResponseCompression();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        // The signing key must match!
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(new JwtOptions().GetSecretKeyBytes()),
+
+                        // Validate the JWT Issuer (iss) claim
+                        ValidateIssuer = true,
+                        ValidIssuer = "ralfesapi",
+
+                        // Validate the JWT Audience (aud) claim
+                        ValidateAudience = true,
+                        ValidAudience = "ralfesweb",
+
+                        // Validate the token expiry
+                        ValidateLifetime = true
+                    };
+
+                    options.IncludeErrorDetails = true;
+                });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title="Api-Calc-Math", Description = "API-CALC", Version = "1.0"});
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CF-API V1");
+                });
             }
 
-            app.UseCors("CorsPolicy");
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(_ => true) // allow any origin
+                 //.AllowCredentials()
+                ); // allow credentials
 
             app.UseHttpsRedirection();
 
@@ -76,7 +131,7 @@ namespace MathCalc.ApiCalc
                 endpoints.MapControllers();
             });
 
-            app.UseMvc();
+            //app.UseMvc();
         }
     }
 }

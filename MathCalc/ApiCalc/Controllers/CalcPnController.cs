@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 using MathCalc.Calc;
+using MathCalc.Calc.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,11 +15,6 @@ namespace MathCalc.ApiCalc.Controllers
     [Route("api/math/primenumber")]
     public class CalcPNController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<CalcPNController> log;
         private ICalcPrimeNumber calcNumberPrime;
 
@@ -27,13 +25,35 @@ namespace MathCalc.ApiCalc.Controllers
 
         }
 
+        /// <summary>
+        /// Metódo responsável por calcular todos os divisores que compõem o número e calcular todos os divisores primos que compõem o número.
+        /// </summary>
+        /// <param name="number">Número inteiro</param>
+        /// <returns>Retorna lista de divores e divisores primos</returns>
         [HttpGet]
         [Route("CalculateDividersAndPrimeDividers")]
+        [ResponseType(typeof(CalcPrimeNumberModel))]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [Produces("application/json")]
+        [AllowAnonymous] //Apenas para testar no PostMan, retirar para ambiente de produção/testes
         public async Task<IActionResult> Get(long number)
         {
-            var result = await calcNumberPrime.CalculateDividersAndPrimeDividersAsync(number);
+            log.LogInformation($"Número solicitado:{number}");
 
-            return Ok(result);
+            try
+            {
+                var result = await calcNumberPrime.CalculateDividersAndPrimeDividersAsync(number);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Erro na chamada do 'CalculateDividersAndPrimeDividers'");
+
+                return BadRequest("Erro ao executar chamada");
+            }
+
+            
         }
     }
 }
