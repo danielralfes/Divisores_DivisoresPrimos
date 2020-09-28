@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MathCalc.Calc;
 using MathCalc.Calc.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

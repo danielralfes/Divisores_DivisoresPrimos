@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MathCalc.ApiCalc
 {
@@ -17,7 +13,7 @@ namespace MathCalc.ApiCalc
             var url = context.HttpContext?.Request.Path.ToString();
             var method = context.HttpContext?.Request.Method;
 
-            //Descomentar o implementar Refit
+            //Descomentar código abaixo ao implementar Refit
             //if (context.Exception is Refit.ApiException apiEx)
             //{
                 //log = log
