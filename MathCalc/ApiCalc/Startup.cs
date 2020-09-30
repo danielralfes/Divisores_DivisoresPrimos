@@ -35,7 +35,7 @@ namespace MathCalc.ApiCalc
 
             services.AddControllers();
 
-            services.AddScoped<ICalcPrimeNumber, CalcPrimeNumber>();
+            services.AddTransient<ICalcPrimeNumber, CalcPrimeNumber>();
 
             services
                 .AddMvc(options =>

@@ -39,7 +39,7 @@ namespace MathCalc.ApiCalc.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         [Produces("text/json")]
-        [AllowAnonymous] //Apenas para testar no PostMan, retirar para ambiente de produção/testes
+        [AllowAnonymous] //Apenas para testar no Swagger, retirar para ambiente de produção/testes
         public async Task<IActionResult> Get(long number)
         {
             log.LogInformation($"Número solicitado:{number}");
