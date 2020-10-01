@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MathCalc.Calc;
 using MathCalc.Calc.Model;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -37,9 +36,7 @@ namespace MathCalc.ApiCalc.Controllers
         [Route("listardivisoes/{number}")]
         [ProducesResponseType(typeof(CalcPrimeNumberModel), 200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
         [Produces("text/json")]
-        [AllowAnonymous] //Apenas para testar no Swagger, retirar para ambiente de produção/testes
         public async Task<IActionResult> Get(long number)
         {
             log.LogInformation($"Número solicitado:{number}");
